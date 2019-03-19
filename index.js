@@ -24,12 +24,7 @@ connection.connect(function(err) {
 
 
 
-function searchDb () {
-  connection.query('SELECT * FROM products WHERE id  = 3', function(err,res) {
-    console.table(res)
-    //connection.end();
-  })
-}
+
 
 function updateDb () {
   connection.query('UPDATE products SET price = 10 ',function(err,res) {
@@ -61,7 +56,7 @@ function open (){
       'Admin', 
       'EXIT'
       ]
-
+      
   })
   .then(function(answer) {
     switch (answer.start) {
@@ -74,48 +69,54 @@ function open (){
       case "Admin":
         adminRole();
         break;
-      // case "EXIT":
-      //   connection.end();
-      //   break;
     }
+    return
   })
+
   connection.end();
 }
 
 // customer function
 function readDb (){
-  inquirer.prompt({
-    name: 'Purchase',
+  inquirer.prompt([{
+    name: 'itemId',
     type: 'input',
     message: 'Enter Item Id number that You Would like to Purchase ?'
-    }).then(function(answer) {
-    var query = "select * FROM products WHWER id ?";
-    connection.query(query,{Purchase: answer.Purchase}, function(err,res) {
+  },{
+    name:'quanity',
+    type: 'input',
+    message: 'How mant would you like'
+  }]).then(function(answers) {
+    var query = "select FROM products WHERE id = ? ";
+    connection.query(query,{itemId: answers}, function(err,res) {
+      console.info(answers);
       console.table(res);
-      open();
+      
     });
   });
 }
 
 // manager function
 function managerRole (){
-  inquirer.prompt({
+  inquirer.prompt([{
     name: 'manage',
     type: 'list',
     message: 'Chose Action',
     choices: ['UPDATE Item Quanity', 'UPDATE Item Price' , 'Exit']
-  })
+  }])
 }
 
+// admin function
 function adminRole() {
-  inquirer.prompt({
+  inquirer.prompt([{
     name: 'admin',
     type: 'list',
     Message: 'Choose What you neeed to do ?',
     choices: ['add Item', 'Delete item', 'change description', 'UPDATE Item Quanity', 'UPDATE Item Price' , 'Exit' ]
-  })
+  }])
 }
 
 
 
 open();
+//searchDb();
