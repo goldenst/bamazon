@@ -42,15 +42,15 @@ function open() {
       message: 'How many would you like to Have'
     }
   ]).then(answers => {
-    console.info('Answers: ', answers)
+    //console.info('Answers: ', answers)
     var query = `SELECT * FROM products WHERE ?`;
     connection.query(query, {
       id: answers.itemId
     }, function (err, res) {
       // console.table(res)
-      console.log('Id#: ', res[0].id)
+      //console.log('Id#: ', res[0].id)
 
-      console.log('Quan: ', res[0].quan)
+      //console.log('Quan: ', res[0].quan)
       // checks quantity in db
       if (res[0].quan < answers.quanity) {
         console.log('The Avalible Stock is only ', res[0].quan, '- Please choose a lower Quanity')
