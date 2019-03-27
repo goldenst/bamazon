@@ -20,7 +20,7 @@ connection.connect(function (err, res) {
   //console.log("connected as id " + connection.threadId + "\n");
   //close connection
 
-  //connection.end()
+ // connection.end()
 });
 
 function searchDb() {
@@ -54,16 +54,64 @@ function searchDb() {
         connection.query(query, function (err, res) {
           if (err) throw err
           console.table(res)
-          open();
+          //open();
         })
       } 
 
+        if (answer.manager === 'Add to low inventory') {
+          //connection.end();
+          addLowInv()
+      } 
+
+      if (answer.manager === 'Add products') {
+        //connection.end();
+        addProd()
+    } 
+    
   })
-  //connection.end();
+  
  }
  open();
 
+function addProd () {
+        var query = 'SELECT * FROM products WHERE quan < 15';
+      connection.query(query, function (err, res) {
+        if (err) throw err
+        console.table(res)
+        //open();
+      })
+  console.log('add Prod function');
+  
+}
 
+function addLowInv () {
+    inquirer.prompt([{
+      name: 'itemid',
+      type: 'input',
+      message: 'enter Item Id you wish to add inventory to'
+    },
+    {
+      name: 'quan',
+      type: 'input',
+      message: 'New Quanity'
+    }]).then(answer => {
+      connection.query(`UPDATE products SET quan = ${answer.quan} WHERE id = ${answer.itemid}`)
+      
+      {
+        if (err) throw err
+        // console.log(answer)
+        // console.table(res)
+      //open();
+      }
+    })
+
+
+
+
+  
+  console.log('low inv function');
+  open();
+}
 
 
 
